@@ -2,19 +2,27 @@ from django.shortcuts import render
 
 # Create your views here.
 from django.http import Http404
-from rest_framework import status
+from rest_framework import status, permissions
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from .models import Project, Pledge
-from .serializers import ProjectSerializer, PledgeSerializer
-
+from .serializers import ProjectSerializer, PledgeSerializer, ProjectDetailSerializer
+from .permissions import IsOwnerOrReadOnly
 
 class ProjectList(APIView):
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    #     permissions.IsAuthenticatedOrReadOnly
+    # ]
     
     def get(self, request):
         projects = Project.objects.all()
         serializer = ProjectSerializer(projects, many=True)
         return Response(serializer.data)
+
+    # def get (self, request): ...
+    
+    # def post(self, request): ... 
+    
 
     def post(self, request):
         serializer = ProjectSerializer(data=request.data)
@@ -31,6 +39,10 @@ class ProjectList(APIView):
 
 
 class ProjectDetail(APIView):
+    permission_classes = [
+        permissions.IsAuthenticatedOrReadOnly,
+        IsOwnerOrReadOnly
+    ]
     
     def get_object(self, pk):
         try:
@@ -43,6 +55,16 @@ class ProjectDetail(APIView):
         serializer = ProjectSerializer(project)
         return Response(serializer.data)
 
+    def put(self, request, pk):
+        project = self.get_object(pk)
+        data = request.data
+        serializer = ProjectDetailSerializer(
+            instance=project,
+            data=data,
+            partial=True
+        )
+        if serializer.is_valid():
+            serializer.save()
 
 class PledgeList(APIView):
     
