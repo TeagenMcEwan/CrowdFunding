@@ -1,1 +1,1 @@
-web: gunicorn --pythonpath crowdfunding wasports.wsgi --log-file --
+web: gunicorn --pythonpath crowdfunding wasports.wsgi --log-file -
