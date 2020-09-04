@@ -18,10 +18,6 @@ class ProjectList(APIView):
         projects = Project.objects.all()
         serializer = ProjectSerializer(projects, many=True)
         return Response(serializer.data)
-
-    # def get (self, request): ...
-    
-    # def post(self, request): ... 
     
 
     def post(self, request):
@@ -66,6 +62,13 @@ class ProjectDetail(APIView):
         )
         if serializer.is_valid():
             serializer.save()
+
+    def delete (self, request, pk):
+        project = self.get_object(pk)
+        self.check_object_permissions(request, project)
+        project.delete()
+        return Response (status=status.HTTP_204_NO_CONTENT)
+
 
 class PledgeList(APIView):
     
