@@ -22,6 +22,7 @@ class CustomUserList(APIView):
             return Response(serializer.data)
         return Response(serializer.errors)
 
+
 class CustomUserDetail(APIView):
 
     def get_object(self, pk):

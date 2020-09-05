@@ -4,6 +4,5 @@ from .models import Project, Pledge
 
 # Register your models here.
 
-#Replace 
 admin.site.register(Project)
 admin.site.register(Pledge)
