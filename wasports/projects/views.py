@@ -48,14 +48,14 @@ class ProjectDetail(APIView):
         
     def get(self, request, pk):
         project = self.get_object(pk)
-        serializer = ProjectSerializer(project)
+        serializer = ProjectDetailSerializer(project)
         return Response(serializer.data)
 
     def put(self, request, pk):
         project = self.get_object(pk)
         self.check_object_permissions(request, project) 
         data = request.data
-        serializer = ProjectDetailSerializer(
+        serializer = ProjectSerializer(
             instance=project,
             data=data,
             partial=True
