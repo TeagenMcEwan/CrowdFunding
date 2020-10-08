@@ -10,7 +10,7 @@ class ProjectSerializer(serializers.Serializer):
     is_open = serializers.BooleanField()
     date_created = serializers.DateTimeField()
     # owner = serializers.CharField(max_length=200)
-    owner = serializers.ReadOnlyField(source='owner.id')
+    owner = serializers.ReadOnlyField(source='owner.username')
 
 
     def create(self, validated_data):
